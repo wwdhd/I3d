@@ -36,8 +36,8 @@ contains
     real(mytype),dimension(xsize(1),xsize(2),xsize(3)) :: ux1,uy1,uz1,ep1
     real(mytype),dimension(xsize(1),xsize(2),xsize(3),numscalar) :: phi1
     
-    real(mytype) :: omega, amplitude
-
+    real(mytype), parameter :: oscillation_period = 100.0  ! example period
+    real(mytype), parameter :: amplitude = 1.0            ! example amplitude
 
 
     real(mytype) :: y,r,um,r3,x,z,h,ct
@@ -87,14 +87,13 @@ contains
     uz1=zero
     byx1=zero;
 
-    omega = 2.0 * pi * f  ! f is the frequency of oscillation
-    amplitude = 0.1       ! Amplitude of the oscillation
-
+    ! Initialize byy1 with oscillatory motion
     do k = 1, xsize(3)
-        do i = 1, xsize(1)
-        	byy1(i,1,k) = amplitude * sin(omega * time)
-        	byy1(i,xsize(2),k) = amplitude * sin(omega * time)
-        end do
+       do j = 1, xsize(2)
+          do i = 1, xsize(1)
+             byy1(i, j, k) = sin(2.0 * pi * real(itime, mytype) / oscillation_period) * amplitude
+          end do
+       end do
     end do
 
     byz1=zero
